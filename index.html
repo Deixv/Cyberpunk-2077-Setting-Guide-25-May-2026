@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyberpunk 2077 — Ultimate Optimization Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Saira+Condensed:wght@300;400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --neon-cyan: #00f5ff;
+    --neon-yellow: #ffe600;
+    --neon-pink: #ff2d78;
+    --neon-green: #39ff14;
+    --neon-orange: #ff6b00;
+    --bg-deep: #050a0f;
+    --bg-card: #0a1520;
+    --bg-card2: #0f1e2e;
+    --border-dim: rgba(0,245,255,0.15);
+    --border-bright: rgba(0,245,255,0.5);
+    --text-primary: #d0eeff;
+    --text-dim: #5a8099;
+    --text-mid: #93b8cc;
+    --red-warn: #ff2d2d;
+    --green-good: #39ff14;
+    --yellow-mid: #ffe600;
+    --orange-warn: #ff6b00;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    background-image:
+      radial-gradient(ellipse 80% 40% at 50% -10%, rgba(0,245,255,0.07) 0%, transparent 60%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,245,255,0.025) 39px, rgba(0,245,255,0.025) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,245,255,0.02) 39px, rgba(0,245,255,0.02) 40px);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: var(--neon-cyan); opacity: 0.4; border-radius: 3px; }
+
+  /* LAYOUT */
+  .wrapper { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* HEADER */
+  .hero {
+    padding: 60px 0 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100px; right: -100px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), var(--neon-pink), transparent);
+  }
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--neon-cyan);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
+  .hero-title {
+    font-family: 'Saira Condensed', sans-serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #fff 0%, var(--neon-cyan) 50%, var(--neon-pink) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .hero-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--neon-yellow);
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+  .hero-meta span { color: var(--neon-cyan); }
+
+  /* NAV */
+  .toc {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-left: 3px solid var(--neon-cyan);
+    padding: 20px 24px;
+    margin-bottom: 40px;
+    border-radius: 2px;
+  }
+  .toc-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--neon-cyan);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .toc-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 4px 20px; }
+  .toc-list li a {
+    color: var(--text-mid);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toc-list li a::before { content: '▸'; color: var(--neon-cyan); font-size: 10px; }
+  .toc-list li a:hover { color: var(--neon-cyan); }
+
+  /* SECTION */
+  .section { margin-bottom: 48px; }
+  .section-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-dim);
+    position: relative;
+  }
+  .section-number {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--neon-pink);
+    background: rgba(255,45,120,0.1);
+    border: 1px solid rgba(255,45,120,0.3);
+    padding: 2px 8px;
+    border-radius: 2px;
+    letter-spacing: 2px;
+    white-space: nowrap;
+  }
+  h2 {
+    font-family: 'Saira Condensed', sans-serif;
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--neon-cyan);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 20px 0 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  h3::after { content: ''; flex: 1; height: 1px; background: var(--border-dim); }
+  h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--neon-yellow);
+    letter-spacing: 1px;
+    margin: 14px 0 6px;
+  }
+  p { color: var(--text-mid); margin-bottom: 10px; font-size: 14px; }
+  strong { color: var(--text-primary); font-weight: 600; }
+  em { color: var(--neon-yellow); font-style: normal; font-weight: 600; }
+
+  /* CARDS */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 2px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+
+  .card-cyan { border-left: 3px solid var(--neon-cyan); }
+  .card-yellow { border-left: 3px solid var(--neon-yellow); }
+  .card-pink { border-left: 3px solid var(--neon-pink); }
+  .card-green { border-left: 3px solid var(--neon-green); }
+  .card-orange { border-left: 3px solid var(--neon-orange); }
+
+  /* ANALYSIS BLOCKS */
+  .analysis-block {
+    background: var(--bg-card2);
+    border: 1px solid var(--border-dim);
+    border-radius: 2px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+  }
+  .analysis-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .at-cyan { color: var(--neon-cyan); }
+  .at-yellow { color: var(--neon-yellow); }
+  .at-pink { color: var(--neon-pink); }
+  .at-green { color: var(--neon-green); }
+  .at-orange { color: var(--neon-orange); }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin-bottom: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: rgba(0,245,255,0.08); border-bottom: 2px solid var(--neon-cyan); }
+  thead th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--neon-cyan);
+    padding: 10px 12px;
+    text-align: left;
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--border-dim); transition: background 0.15s; }
+  tbody tr:hover { background: rgba(0,245,255,0.04); }
+  tbody td { padding: 9px 12px; color: var(--text-mid); vertical-align: middle; }
+  td strong { color: var(--text-primary); }
+
+  /* IMPACT PILLS */
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 2px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    white-space: nowrap; font-weight: 700;
+  }
+  .pill-high { background: rgba(255,45,45,0.15); color: #ff5555; border: 1px solid rgba(255,45,45,0.3); }
+  .pill-med  { background: rgba(255,230,0,0.12); color: var(--neon-yellow); border: 1px solid rgba(255,230,0,0.3); }
+  .pill-low  { background: rgba(57,255,20,0.1); color: var(--neon-green); border: 1px solid rgba(57,255,20,0.25); }
+  .pill-nil  { background: rgba(90,128,153,0.15); color: var(--text-dim); border: 1px solid rgba(90,128,153,0.2); }
+  .pill-trap { background: rgba(255,45,120,0.15); color: var(--neon-pink); border: 1px solid rgba(255,45,120,0.3); }
+  .pill-boost { background: rgba(0,245,255,0.1); color: var(--neon-cyan); border: 1px solid rgba(0,245,255,0.25); }
+
+  /* PRESET CARDS */
+  .preset { background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
+  .preset-header {
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .preset-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 1px;
+  }
+  .preset-name {
+    font-family: 'Saira Condensed', sans-serif;
+    font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .preset-body { padding: 16px 20px; }
+  .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width: 600px) { .preset-grid { grid-template-columns: 1fr; } }
+  .preset-col-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--text-dim); letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .setting-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 5px 0; border-bottom: 1px solid rgba(0,245,255,0.05);
+    font-size: 13px;
+  }
+  .setting-row:last-child { border-bottom: none; }
+  .setting-key { color: var(--text-dim); flex: 1; }
+  .setting-val { color: var(--text-primary); font-weight: 600; font-family: 'Share Tech Mono', monospace; font-size: 11px; }
+  .sv-on { color: var(--neon-green); }
+  .sv-off { color: var(--red-warn); }
+  .sv-q { color: var(--neon-cyan); }
+  .sv-b { color: var(--neon-yellow); }
+  .sv-p { color: var(--neon-pink); }
+  .sv-u { color: #fff; }
+  .sv-h { color: var(--text-primary); }
+  .sv-m { color: var(--text-mid); }
+  .sv-l { color: var(--text-dim); }
+  .sv-dg { color: var(--neon-green); }
+
+  /* PRESET COLORS */
+  .preset-competitive .preset-header { background: linear-gradient(135deg, rgba(255,230,0,0.08), transparent); }
+  .preset-competitive .preset-badge { background: rgba(255,230,0,0.15); color: var(--neon-yellow); border: 1px solid rgba(255,230,0,0.3); }
+  .preset-competitive .preset-name { color: var(--neon-yellow); }
+
+  .preset-balanced .preset-header { background: linear-gradient(135deg, rgba(0,245,255,0.08), transparent); }
+  .preset-balanced .preset-badge { background: rgba(0,245,255,0.1); color: var(--neon-cyan); border: 1px solid rgba(0,245,255,0.3); }
+  .preset-balanced .preset-name { color: var(--neon-cyan); }
+
+  .preset-cinematic .preset-header { background: linear-gradient(135deg, rgba(255,107,0,0.08), transparent); }
+  .preset-cinematic .preset-badge { background: rgba(255,107,0,0.15); color: var(--neon-orange); border: 1px solid rgba(255,107,0,0.3); }
+  .preset-cinematic .preset-name { color: var(--neon-orange); }
+
+  .preset-rt .preset-header { background: linear-gradient(135deg, rgba(57,255,20,0.06), transparent); }
+  .preset-rt .preset-badge { background: rgba(57,255,20,0.1); color: var(--neon-green); border: 1px solid rgba(57,255,20,0.25); }
+  .preset-rt .preset-name { color: var(--neon-green); }
+
+  .preset-pt .preset-header { background: linear-gradient(135deg, rgba(255,45,120,0.08), transparent); }
+  .preset-pt .preset-badge { background: rgba(255,45,120,0.1); color: var(--neon-pink); border: 1px solid rgba(255,45,120,0.3); }
+  .preset-pt .preset-name { color: var(--neon-pink); }
+
+  /* RANKING LIST */
+  .rank-list { list-style: none; }
+  .rank-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 2px;
+    margin-bottom: 6px;
+    font-size: 13px;
+  }
+  .rank-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px; font-weight: 700; min-width: 28px;
+    text-align: center;
+  }
+  .rank-info { flex: 1; }
+  .rank-name { color: var(--text-primary); font-weight: 600; margin-bottom: 2px; }
+  .rank-desc { color: var(--text-dim); font-size: 12px; }
+
+  /* VRAM TIERS */
+  .vram-tier {
+    background: var(--bg-card);
+    border: 1px solid var(--border-dim);
+    border-radius: 2px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .vram-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .vram-badge {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 14px; font-weight: 700;
+    padding: 3px 12px; border-radius: 2px;
+  }
+
+  /* WARNING / TIP BOXES */
+  .box {
+    padding: 12px 16px; border-radius: 2px; margin-bottom: 12px;
+    font-size: 13px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .box-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+  .box-warn { background: rgba(255,45,45,0.08); border: 1px solid rgba(255,45,45,0.25); color: #ff8888; }
+  .box-tip  { background: rgba(0,245,255,0.06); border: 1px solid rgba(0,245,255,0.2); color: var(--text-mid); }
+  .box-trap { background: rgba(255,45,120,0.08); border: 1px solid rgba(255,45,120,0.25); color: var(--neon-pink); }
+  .box-note { background: rgba(255,230,0,0.06); border: 1px solid rgba(255,230,0,0.2); color: #ccbb00; }
+
+  /* DEBATE BLOCK */
+  .debate {
+    background: var(--bg-card2);
+    border: 1px solid var(--border-dim);
+    border-radius: 2px; overflow: hidden; margin-bottom: 12px;
+  }
+  .debate-header {
+    background: rgba(255,107,0,0.1);
+    border-bottom: 1px solid rgba(255,107,0,0.2);
+    padding: 8px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--neon-orange); letter-spacing: 2px; text-transform: uppercase;
+  }
+  .debate-body { padding: 12px 14px; }
+  .debate-side { margin-bottom: 8px; }
+  .debate-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+  .debate-pro .debate-label { color: var(--neon-green); }
+  .debate-con .debate-label { color: var(--red-warn); }
+  .debate-verdict { border-top: 1px solid var(--border-dim); padding-top: 8px; margin-top: 8px; }
+  .debate-verdict .debate-label { color: var(--neon-yellow); }
+
+  /* FOOTER */
+  .footer {
+    border-top: 1px solid var(--border-dim);
+    padding-top: 24px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; color: var(--text-dim); letter-spacing: 2px;
+  }
+
+  /* MONO TEXT */
+  code {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; color: var(--neon-cyan);
+    background: rgba(0,245,255,0.08); padding: 1px 5px; border-radius: 2px;
+  }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border-dim); margin: 24px 0; }
+
+  /* EFFICIENCY TABLE ROW COLORS */
+  .eff-high-gain { background: rgba(57,255,20,0.04); }
+  .eff-high-cost { background: rgba(255,45,45,0.04); }
+  .eff-trap { background: rgba(255,45,120,0.04); }
+
+  /* SCROLLTOP */
+  .scroll-top {
+    position: fixed; bottom: 24px; right: 24px; z-index: 100;
+    width: 36px; height: 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; border-radius: 2px;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .scroll-top:hover { background: rgba(0,245,255,0.15); }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HERO -->
+  <div class="hero" id="top">
+    <div class="hero-tag">// OPTIMIZATION DATABASE v2.2 · PATCH 2.2 · 2025</div>
+    <div class="hero-title">Cyberpunk 2077<br>Ultimate PC Guide</div>
+    <div class="hero-sub">BALANCED · PERFORMANCE · LATENCY · VISUAL QUALITY · STABILITY</div>
+    <div class="hero-meta">
+      <span>SOURCES: Digital Foundry · Hardware Unboxed · Reddit r/cyberpunkgame · PCOptimizedSettings · CapFrameX · Steam Community · WCCFTech · TechSpot</span>
+      <span>PATCH: 2.2 (Dec 2024)</span>
+      <span>DATA: POST-2.1 VERIFIED</span>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">// MỤC LỤC</div>
+    <ul class="toc-list">
+      <li><a href="#bottleneck">01. Phân tích Bottleneck</a></li>
+      <li><a href="#vram">02. VRAM theo tier GPU</a></li>
+      <li><a href="#upscaling">03. DLSS / FSR / XeSS / DLAA</a></li>
+      <li><a href="#rt-pt">04. RT / Path Tracing Impact</a></li>
+      <li><a href="#settings-analysis">05. Phân tích từng setting</a></li>
+      <li><a href="#latency">06. Latency & Frame Cap Strategy</a></li>
+      <li><a href="#presets">07. 5 Preset đầy đủ</a></li>
+      <li><a href="#debates">08. Tranh cãi cộng đồng</a></li>
+      <li><a href="#efficiency">09. Efficiency Table</a></li>
+      <li><a href="#fps-killers">10. Biggest FPS Killers</a></li>
+      <li><a href="#trap-settings">11. Trap Settings</a></li>
+      <li><a href="#misc">12. HDR · ReShade · OS tweaks</a></li>
+    </ul>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 1: BOTTLENECK
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="bottleneck">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <h2>Phân tích Bottleneck</h2>
+    </div>
+
+    <p>Cyberpunk 2077 là game vừa CPU-bound vừa GPU-bound tùy theo context, resolution, và settings đang dùng. Hiểu đúng điều này sẽ tránh lãng phí effort tối ưu sai chỗ.</p>
+
+    <h3>CPU Bottleneck</h3>
+    <div class="card card-yellow">
+      <h4>Khi nào CPU là cổ chai?</h4>
+      <p><strong>1080p không-RT, Crowd Density cao, khu vực đông đúc (Watson, Kabuki, Dogtown market).</strong> Tại 1080p, TechSpot và PCOptimizedSettings đo được độ lệch GPU-busy 30% — nghĩa là GPU đang đợi CPU gửi draw call. Một game như CP2077 với NPC AI, pathfinding, physics simulation, và traffic logic đặt tải nặng lên single-thread performance.</p>
+      <p><strong>Dấu hiệu nhận biết:</strong> GPU usage dưới 85-90% trong khi FPS thấp hơn expected, frame time spike không đều trong MSI Afterburner, CPU core nào đó chạy 95-100%.</p>
+      <p><strong>Cách xử lý:</strong> Crowd Density là setting CPU-bound số 1. Hạ từ High xuống Medium có thể giảm CPU load 18% trong khu đông (đo bởi bottleneckcalculator.us.com). Đặc biệt quan trọng với CPU cũ hơn Ryzen 5 3600 / Core i5-10600K. RT cũng adds CPU overhead vì CPU phải tính toán BVH traversal cho RT pipeline — tắt RT có thể giảm CPU load thêm 12%.</p>
+    </div>
+
+    <div class="box box-warn">
+      <span class="box-icon">⚠</span>
+      <span><strong>Intel Arrow Lake (Core Ultra 9 285K):</strong> Patch 2.2 cụ thể fix threading cho Arrow Lake. Thay đổi setting CPU thread priority từ "Prioritize P-cores" (nhanh hơn với game cũ) sang "Auto/Balanced hybrid" — CapFrameX đo được up to 30% better 1% lows sau khi áp dụng đúng setting cho patch 2.2. Nếu bạn dùng Arrow Lake, update driver Intel và patch game lên 2.2 là bắt buộc.</span>
+    </div>
+
+    <div class="box box-note">
+      <span class="box-icon">◈</span>
+      <span><strong>RAM Speed:</strong> Chạy DDR5 ở JEDEC 4800 MHz thay vì rated 6000 MHz có thể cost 8–12 FPS trong khu đông đúc do CPU memory latency. XMP/EXPO là bắt buộc với build hiện đại.</span>
+    </div>
+
+    <h3>GPU Bottleneck</h3>
+    <div class="card card-cyan">
+      <h4>Khi nào GPU là cổ chai? (Hầu hết thời gian)</h4>
+      <p>Ở 1440p và 4K, game luôn là GPU-bound trừ khi bạn có GPU quá mạnh cho resolution đó. RT và Path Tracing khiến game GPU-bound cực nặng ngay cả với RTX 4090 ở native 4K (dưới 20 FPS native 4K RT Overdrive, theo PCOptimizedSettings).</p>
+      <p><strong>Dấu hiệu:</strong> GPU usage 98-100% ổn định, CPU dưới 80%.</p>
+      <p><strong>Fix:</strong> Upscaling (DLSS/FSR/XeSS), giảm resolution, tắt SSR Psycho, tắt Volumetric Fog.</p>
+    </div>
+
+    <h3>Frame Pacing & 1% Lows</h3>
+    <div class="card card-orange">
+      <p>CP2077 có 1% low thường <strong>40-60% thấp hơn avg FPS</strong> trong khu đông NPC — đây là đặc tính của open world game với CPU-bound scenes lẫn vào GPU-bound scenes. Shader compilation stutter (đặc biệt lần đầu vào khu vực mới) là nguồn gây lags thường bị nhầm là setting issue.</p>
+      <p><strong>Fix cho 1% lows:</strong> (1) Xóa shader cache cũ và rebuild, (2) tắt E-core trên Intel 12th/13th gen nếu dùng "Prioritize P-cores" (patch 2.2 đã cải thiện nhưng một số hệ thống vẫn bị), (3) HPET off trong BIOS, (4) Windows Power Plan: <strong>Balanced hoặc High Performance — KHÔNG Ultimate Performance</strong> vì Ultimate Performance gây micro-stutter trên DirectX 12 titles bao gồm CP2077.</p>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 2: VRAM
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="vram">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <h2>VRAM Usage & Tier Guide</h2>
+    </div>
+
+    <p>PCOptimizedSettings đo VRAM của CP2077: <strong>~8 GB ở 1080p Ultra, ~8.7 GB ở 1440p, ~9.64 GB ở 4K</strong> với rasterized Ultra. RT tăng thêm 1–3 GB trên mỗi mức resolution. Đây là dedicated VRAM usage — allocated cao hơn nhiều nhưng không phải con số quan trọng.</p>
+
+    <div class="vram-tier">
+      <div class="vram-header">
+        <div class="vram-badge" style="background:rgba(255,45,45,0.15);color:#ff5555;border:1px solid rgba(255,45,45,0.3);">8 GB VRAM</div>
+        <span style="color:var(--text-dim);font-size:13px;">RTX 3070/3080, RTX 4060/4060Ti 8GB, RX 6700 XT</span>
+      </div>
+      <div class="setting-row"><span class="setting-key">1080p Ultra (no RT)</span><span class="setting-val sv-on">✓ OK — borderline nhưng playable</span></div>
+      <div class="setting-row"><span class="setting-key">1440p Ultra (no RT)</span><span class="setting-val sv-b">⚠ Risky — VRAM đầy, stutter risk</span></div>
+      <div class="setting-row"><span class="setting-key">Any RT</span><span class="setting-val sv-off">✗ Hạ Texture xuống Medium bắt buộc</span></div>
+      <div class="setting-row"><span class="setting-key">Path Tracing</span><span class="setting-val sv-off">✗ Không khả thi thực tế</span></div>
+      <div class="setting-row"><span class="setting-key">Khuyến nghị Texture</span><span class="setting-val sv-m">HIGH nếu no-RT · MEDIUM nếu RT on</span></div>
+      <p style="margin-top:10px;font-size:12px;color:var(--text-dim);">⚡ Lưu ý quan trọng từ Steam Community: Với 8GB + RT, VRAM overflow gây bug UI slowdown/lag inventory cộng dồn theo thời gian chơi. Fix duy nhất: hạ texture xuống Medium để usage dưới 7800 MB. Không phải do game unoptimized — là NVIDIA driver bug với RT overflow.</p>
+    </div>
+
+    <div class="vram-tier">
+      <div class="vram-header">
+        <div class="vram-badge" style="background:rgba(255,230,0,0.12);color:var(--neon-yellow);border:1px solid rgba(255,230,0,0.3);">12 GB VRAM</div>
+        <span style="color:var(--text-dim);font-size:13px;">RTX 3080 12GB, RTX 4070/4070 Super, RX 7700 XT</span>
+      </div>
+      <div class="setting-row"><span class="setting-key">1440p Ultra (no RT)</span><span class="setting-val sv-on">✓ Tốt — headroom rộng</span></div>
+      <div class="setting-row"><span class="setting-key">1440p với RT (reflections + shadows)</span><span class="setting-val sv-b">⚠ Tight — dùng DLSS Quality</span></div>
+      <div class="setting-row"><span class="setting-key">4K Ultra (no RT)</span><span class="setting-val sv-b">⚠ Cần DLSS/FSR để tránh stutter</span></div>
+      <div class="setting-row"><span class="setting-key">Path Tracing</span><span class="setting-val sv-b">⚠ Cần Frame Gen + DLSS Balanced/Perf</span></div>
+      <div class="setting-row"><span class="setting-key">Khuyến nghị Texture</span><span class="setting-val sv-u">ULTRA an toàn với no-RT · HIGH với RT</span></div>
+    </div>
+
+    <div class="vram-tier">
+      <div class="vram-header">
+        <div class="vram-badge" style="background:rgba(57,255,20,0.1);color:var(--neon-green);border:1px solid rgba(57,255,20,0.25);">16 GB+ VRAM</div>
+        <span style="color:var(--text-dim);font-size:13px;">RTX 4080/4090, RTX 4060Ti 16GB, RX 7900 XT/XTX</span>
+      </div>
+      <div class="setting-row"><span class="setting-key">4K Ultra + RT</span><span class="setting-val sv-on">✓ Comfortable</span></div>
+      <div class="setting-row"><span class="setting-key">Path Tracing</span><span class="setting-val sv-on">✓ Viable với DLSS + Frame Gen</span></div>
+      <div class="setting-row"><span class="setting-key">Texture mods (HD Reworked)</span><span class="setting-val sv-b">⚠ 4K textures có thể chạm 14+ GB</span></div>
+      <div class="setting-row"><span class="setting-key">Khuyến nghị Texture</span><span class="setting-val sv-on">ULTRA — không cần lo</span></div>
+      <p style="margin-top:10px;font-size:12px;color:var(--text-dim);">TechSpot confirm: 16GB là mức lý tưởng cho high-end experience với RT/PT enabled, đặc biệt nếu muốn future-proof với HD texture mods.</p>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 3: UPSCALING
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="upscaling">
+    <div class="section-header">
+      <div class="section-number">03</div>
+      <h2>DLSS / FSR / XeSS / DLAA — Deep Comparison</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tech</th><th>GPU Support</th><th>Image Quality</th><th>Ghosting</th><th>Sharpness</th><th>Perf Overhead</th><th>Best Used</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DLSS Super Res</strong></td>
+            <td>NVIDIA RTX only</td>
+            <td><span class="pill pill-high">Best</span></td>
+            <td>Thấp nhất</td>
+            <td>Tốt, có thể over-sharp ở 1080p</td>
+            <td><span class="pill pill-low">~2ms overhead</span></td>
+            <td>RTX users — mọi resolution</td>
+          </tr>
+          <tr>
+            <td><strong>DLAA</strong></td>
+            <td>NVIDIA RTX only</td>
+            <td><span class="pill pill-boost">Native+</span></td>
+            <td>Thấp nhất</td>
+            <td>Cực tốt, không blur</td>
+            <td><span class="pill pill-med">~8-12% FPS cost</span></td>
+            <td>Khi có FPS headroom, không muốn upscale</td>
+          </tr>
+          <tr>
+            <td><strong>XeSS</strong></td>
+            <td>Tất cả GPU (DP4a mode trên non-Intel)</td>
+            <td><span class="pill pill-med">2nd Best</span></td>
+            <td>Thấp</td>
+            <td>Tốt, ít noise hơn FSR</td>
+            <td>Gần bằng FSR</td>
+            <td>AMD/non-RTX users thay cho FSR</td>
+          </tr>
+          <tr>
+            <td><strong>FSR 2/3</strong></td>
+            <td>Tất cả GPU</td>
+            <td><span class="pill pill-low">3rd</span></td>
+            <td>Ghosting/temporal noise rõ</td>
+            <td>Blur ở Quality, rõ hơn ở Ultra Quality</td>
+            <td>Nhanh nhất trong 3</td>
+            <td>AMD GPU không support XeSS hardware mode</td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>Native TAA</strong></td>
+            <td>Tất cả</td>
+            <td>Biến thiên</td>
+            <td>Ghosting với fast movement</td>
+            <td>Bị blur nhẹ</td>
+            <td><span class="pill pill-nil">0 gain</span></td>
+            <td>Ít dùng — DLAA tốt hơn</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Quality Mode Hierarchy</h3>
+    <div class="card-grid">
+      <div class="card card-cyan">
+        <h4>Nên dùng ở độ phân giải nào?</h4>
+        <div class="setting-row"><span class="setting-key">DLSS Quality</span><span class="setting-val sv-q">1440p → render 960p · 4K → 1440p</span></div>
+        <div class="setting-row"><span class="setting-key">DLSS Balanced</span><span class="setting-val sv-b">1440p → render 853p · Tốt cho RT</span></div>
+        <div class="setting-row"><span class="setting-key">DLSS Performance</span><span class="setting-val sv-p">Chỉ dùng khi PT on — 1440p render 720p</span></div>
+        <div class="setting-row"><span class="setting-key">DLSS Ultra Perf</span><span class="setting-val sv-off">Tránh — artifacts nặng trừ 4K PT</span></div>
+        <p style="font-size:12px;color:var(--text-dim);margin-top:8px;">Steam Community consensus (2024): DLSS ở 1080p có thể trông oversmeared. Ở 1080p → dùng DLAA hoặc DLSS Quality tối thiểu. Ở 4K Quality mode trông rất tốt theo đánh giá đa số.</p>
+      </div>
+      <div class="card card-yellow">
+        <h4>DLSS Sharpness Setting</h4>
+        <p>Default DLSS sharpness trong game thường quá cao (~50-70) gây over-sharpening. <strong>Recommendation: 0–20%</strong> cho hình ảnh tự nhiên nhất. Một số người dùng Reddit và Steam Community thích 0% hoàn toàn, sau đó dùng ReShade/NVIDIA Sharpen nhẹ nếu cần. Đừng đặt trên 50% — hình sẽ trông như filter ảnh giả tạo.</p>
+        <p style="font-size:12px;color:var(--text-dim);">Với FSR: sharpness 0.70-0.80 được cộng đồng (Steam) gợi ý để compensate blur của FSR — nhưng nhiều người vẫn thấy inferior hơn DLSS.</p>
+      </div>
+    </div>
+
+    <h3>Frame Generation — Latency Tradeoff</h3>
+    <div class="analysis-block">
+      <div class="analysis-title at-pink">⚠ QUAN TRỌNG: Frame Gen có tradeoff latency thực sự</div>
+      <p><strong>DLSS Frame Generation (RTX 40xx+):</strong> Tạo frame interpolated giữa 2 real frames, về lý thuyết tăng gấp đôi FPS hiển thị. Nhưng nó <strong>vô hiệu hóa NVIDIA Reflex</strong> khi active. Digital Foundry / NeoGAF đo latency với Frame Gen ở 55-60ms, cao hơn đáng kể so với 17-20ms với Reflex without FG.</p>
+      <p><strong>Khi nào FG có ý nghĩa thực tế:</strong> Chỉ khi base FPS của bạn đủ cao (≥60 FPS real) trước khi bật FG. FG tạo ra FPS "ảo" — nếu base là 35 FPS và FG cho 70 FPS hiển thị, game vẫn feel như 35 FPS real frames với latency cao hơn. Community trên Steam thống nhất: <em>"Frame gen với base &lt;50 FPS thực cảm giác choppy và laggy hơn không có FG"</em>.</p>
+      <p><strong>FSR Frame Gen mod (RTX 20/30 series):</strong> Mod không chính thức, tồn tại nhưng có VSync issues, tearing, và worse artifact quality. Viable nếu có G-Sync/FreeSync display nhưng không ổn định như native DLSS FG.</p>
+    </div>
+
+    <div class="box box-trap">
+      <span class="box-icon">⛔</span>
+      <span><strong>TRAP:</strong> Bật Frame Generation mà không có G-Sync/FreeSync + bật V-Sync trong game = slo-mo input lag nghiêm trọng (nhiều report trên Steam). Setup đúng: Frame Gen + G-Sync + V-Sync OFF in-game + frame cap ở [refresh rate - 3]. Ví dụ 144Hz monitor → cap 141 FPS.</span>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 4: RT / PT
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="rt-pt">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <h2>Ray Tracing & Path Tracing — Impact Analysis</h2>
+    </div>
+
+    <h3>RT Feature-by-Feature Cost vs Gain</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>RT Feature</th><th>FPS Cost (est.)</th><th>Visual Gain</th><th>Worth it?</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr class="eff-high-gain">
+            <td><strong>RT Reflections</strong></td>
+            <td><span class="pill pill-med">15-25%</span></td>
+            <td><span class="pill pill-high">Rõ rệt</span></td>
+            <td><span class="pill pill-boost">YES</span></td>
+            <td>Night City wet streets — hiệu ứng visual nhất</td>
+          </tr>
+          <tr>
+            <td><strong>RT Shadows (Local)</strong></td>
+            <td><span class="pill pill-high">20-30%</span></td>
+            <td><span class="pill pill-med">Vừa</span></td>
+            <td><span class="pill pill-med">Situational</span></td>
+            <td>Tắt nếu RTX 4070 trở xuống — rasterized shadow đủ tốt</td>
+          </tr>
+          <tr class="eff-high-cost">
+            <td><strong>RT Ambient Occlusion</strong></td>
+            <td><span class="pill pill-high">15-20%</span></td>
+            <td><span class="pill pill-low">Nhỏ</span></td>
+            <td><span class="pill pill-trap">NO</span></td>
+            <td>GTAO (rasterized AO) đạt 90% quality ở 10% cost</td>
+          </tr>
+          <tr class="eff-high-cost">
+            <td><strong>RT Diffuse Illumination</strong></td>
+            <td><span class="pill pill-high">35-50%</span></td>
+            <td><span class="pill pill-high">Lớn nhất</span></td>
+            <td><span class="pill pill-med">Only with FG</span></td>
+            <td>Toggle đắt nhất — đây là core của Path Tracing</td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>RT Psycho Preset</strong></td>
+            <td><span class="pill pill-high">60-80%</span></td>
+            <td><span class="pill pill-high">Transformative</span></td>
+            <td><span class="pill pill-trap">Chỉ RTX 4080+</span></td>
+            <td>Tất cả RT features on — cần DLSS + FG để playable</td>
+          </tr>
+          <tr>
+            <td><strong>Path Tracing (Overdrive)</strong></td>
+            <td><span class="pill pill-high">80-90%+</span></td>
+            <td><span class="pill pill-high">Transformative</span></td>
+            <td><span class="pill pill-trap">RTX 4080/4090 only</span></td>
+            <td>RTX 4090 native 4K = dưới 20 FPS. Cần DLSS + FG bắt buộc</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Ray Reconstruction (DLSS 3.5)</h3>
+    <div class="card card-pink">
+      <h4>Ray Reconstruction là gì và khi nào nên dùng?</h4>
+      <p>RR là AI denoiser thay thế traditional denoiser của RT pipeline. Nó <strong>không tăng FPS</strong> (overhead nhỏ ~2ms trên RTX 4090 4K) nhưng cải thiện đáng kể quality của RT/PT output: ít noise hơn, lighting responses nhanh hơn, reflections sharp hơn.</p>
+      <p><strong>Yêu cầu:</strong> Path Tracing phải bật (in-game default). Muốn dùng với Regular RT → cần edit <code>UserSettings.json</code>, set <code>DLSS_D = true</code> và set file read-only. Không phải bug — CDPR lock RR vào PT intentionally nhưng nó hoạt động tốt với regular RT.</p>
+      <div class="box box-note" style="margin-top:10px">
+        <span class="box-icon">◈</span>
+        <span>Một số Steam Community users (2023-2024) report RR gây ghosting/noise artifacts trong certain lighting conditions, đặc biệt ở 1080p DLSS Performance. Đây là tradeoff thực sự — RR làm sáng hơn, nhiều sample hơn nhưng có artifact profile khác DLSS thuần. Consensus: RR + PT + DLSS Quality = best visual result; RR + Regular RT = debatable nhưng hầu hết thấy cải thiện.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 5: SETTINGS ANALYSIS
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="settings-analysis">
+    <div class="section-header">
+      <div class="section-number">05</div>
+      <h2>Phân tích Từng Setting — Visual vs Performance vs VRAM vs CPU</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>FPS Cost (Ultra→Low)</th>
+            <th>VRAM Cost</th>
+            <th>CPU Cost</th>
+            <th>Visual Gain</th>
+            <th>Verdict</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="eff-high-cost">
+            <td><strong>Screen Space Reflections</strong></td>
+            <td><span class="pill pill-high">25-33% (Psycho)</span></td>
+            <td><span class="pill pill-med">Trung bình</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-med">Rõ ở Psycho vs High</span></td>
+            <td><span class="pill pill-boost">HIGH là sweet spot · Tránh Psycho</span></td>
+          </tr>
+          <tr class="eff-high-cost">
+            <td><strong>Volumetric Fog</strong></td>
+            <td><span class="pill pill-high">15-20%</span></td>
+            <td><span class="pill pill-low">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-low">Nhỏ vs Medium</span></td>
+            <td><span class="pill pill-boost">LOW là optimal · Tránh Ultra</span></td>
+          </tr>
+          <tr class="eff-high-cost">
+            <td><strong>Crowd Density</strong></td>
+            <td><span class="pill pill-high">10-18% in city</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-high">Rất cao</span></td>
+            <td><span class="pill pill-low">Nhỏ (High vs Med)</span></td>
+            <td><span class="pill pill-boost">MEDIUM là best practice</span></td>
+          </tr>
+          <tr>
+            <td><strong>Volumetric Cloud Quality</strong></td>
+            <td><span class="pill pill-med">4-5% (Ultra→Off)</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-low">Nhỏ vs Off</span></td>
+            <td><span class="pill pill-boost">MEDIUM-LOW · Off nếu cần FPS</span></td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>Texture Quality</strong></td>
+            <td><span class="pill pill-nil">0-3% FPS</span></td>
+            <td><span class="pill pill-high">Rất cao (1-2 GB)</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-high">Rõ rệt</span></td>
+            <td><span class="pill pill-boost">ULTRA nếu VRAM cho phép — free visual</span></td>
+          </tr>
+          <tr>
+            <td><strong>Ambient Occlusion</strong></td>
+            <td><span class="pill pill-med">8-15%</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-med">Rõ vs Off</span></td>
+            <td><span class="pill pill-boost">MEDIUM — Ultra overkill, Off = ugly</span></td>
+          </tr>
+          <tr>
+            <td><strong>Shadow Quality</strong></td>
+            <td><span class="pill pill-med">5-10%</span></td>
+            <td><span class="pill pill-low">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-med">Vừa</span></td>
+            <td><span class="pill pill-boost">HIGH — Ultra marginal return</span></td>
+          </tr>
+          <tr>
+            <td><strong>Local Shadow Quality</strong></td>
+            <td><span class="pill pill-med">5-8%</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-med">Indoor shadows</span></td>
+            <td><span class="pill pill-boost">MEDIUM trong nhà nhỏ</span></td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>Color Precision</strong></td>
+            <td><span class="pill pill-med">5-6%</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Micro (subtlety)</span></td>
+            <td><span class="pill pill-boost">MEDIUM → free 5% FPS</span></td>
+          </tr>
+          <tr>
+            <td><strong>Mirror Quality</strong></td>
+            <td><span class="pill pill-low">3-6%</span></td>
+            <td><span class="pill pill-med">Khá cao</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-med">Trong phòng có gương</span></td>
+            <td><span class="pill pill-boost">MEDIUM — High tốn VRAM nhiều</span></td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>Film Grain / Chromatic Aberration</strong></td>
+            <td><span class="pill pill-nil">0%</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-trap">Negative (visual noise)</span></td>
+            <td><span class="pill pill-trap">TẮT — không benefit nào</span></td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>Motion Blur</strong></td>
+            <td><span class="pill pill-nil">~1%</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-trap">Giảm clarity</span></td>
+            <td><span class="pill pill-trap">TẮT với hầu hết players</span></td>
+          </tr>
+          <tr>
+            <td><strong>Depth of Field</strong></td>
+            <td><span class="pill pill-low">2-4%</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-med">Cinematic cutscenes</span></td>
+            <td><span class="pill pill-boost">OFF nếu competitive · ON cho cinematic</span></td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>Anisotropic Filtering</strong></td>
+            <td><span class="pill pill-nil">~0%</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-high">Rõ trên bề mặt góc xiên</span></td>
+            <td><span class="pill pill-boost">16x — free, luôn bật max</span></td>
+          </tr>
+          <tr>
+            <td><strong>Subsurface Scattering</strong></td>
+            <td><span class="pill pill-nil">Marginal</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Skin realism (micro)</span></td>
+            <td><span class="pill pill-boost">ON — gần như free</span></td>
+          </tr>
+          <tr>
+            <td><strong>Contact Shadows</strong></td>
+            <td><span class="pill pill-low">~2%</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-nil">0</span></td>
+            <td><span class="pill pill-low">Micro-shadows tốt</span></td>
+            <td><span class="pill pill-boost">ON — cheap visual polish</span></td>
+          </tr>
+          <tr>
+            <td><strong>Character Detail Level</strong></td>
+            <td><span class="pill pill-nil">~1-2%</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-nil">Thấp</span></td>
+            <td><span class="pill pill-med">NPC quality gần</span></td>
+            <td><span class="pill pill-boost">ULTRA — gần free</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Texture Streaming — Stutter Analysis</h3>
+    <div class="card card-orange">
+      <p>CP2077 streaming textures theo demand từ SSD/HDD. Kể từ patch 2.0, <strong>HDD không còn được support</strong> — HDD gây texture pop-in và streaming stutter không thể fix bằng settings. NVMe SSD giảm đáng kể các loại stutter liên quan texture loading khi di chuyển nhanh.</p>
+      <p>Nếu vẫn còn texture pop-in với NVMe: (1) kiểm tra VRAM usage — nếu gần giới hạn, game phải evict textures thường xuyên, (2) hạ Texture Quality một bậc, (3) xóa shader cache và rebuild.</p>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 6: LATENCY
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="latency">
+    <div class="section-header">
+      <div class="section-number">06</div>
+      <h2>Latency, Frame Cap, G-Sync, & V-Sync Strategy</h2>
+    </div>
+
+    <h3>NVIDIA Reflex</h3>
+    <div class="card card-cyan">
+      <p><strong>Luôn bật NVIDIA Reflex + Boost</strong> trên mọi RTX setup không dùng Frame Generation. WCCFTech đo được latency thấp nhất — 17.6ms — với G-Sync + Reflex + capped FPS. Reflex giảm pre-render queue, cho phép GPU nhận input ngay lập tức thay vì queue đợi.</p>
+      <p><strong>Reflex + Frame Generation:</strong> Frame Generation vô hiệu hóa Reflex. Đây là tradeoff thực sự theo Steam Community — FG tăng FPS hiển thị nhưng latency tăng lên 55-60ms so với 17ms với Reflex. Với game action/combat, Reflex quan trọng hơn FPS cao giả tạo.</p>
+    </div>
+
+    <h3>Frame Cap Strategy</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Setup</th><th>Frame Cap Strategy</th><th>V-Sync</th><th>Kết quả</th></tr>
+        </thead>
+        <tbody>
+          <tr class="eff-high-gain">
+            <td><strong>G-Sync Monitor + RTX</strong></td>
+            <td>Cap = Refresh Rate - 3 (ví dụ: 141 cho 144Hz)</td>
+            <td>OFF in-game · G-Sync handles it</td>
+            <td>Best latency + tear-free</td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>G-Sync + Reflex</strong></td>
+            <td>Reflex auto-manages cap</td>
+            <td>OFF in-game</td>
+            <td>17.6ms latency (WCCFTech)</td>
+          </tr>
+          <tr>
+            <td><strong>FreeSync + AMD</strong></td>
+            <td>Cap = Refresh Rate - 3</td>
+            <td>OFF in-game</td>
+            <td>Good — dùng AMD Anti-Lag</td>
+          </tr>
+          <tr>
+            <td><strong>No VRR + Standard Display</strong></td>
+            <td>Cap = Refresh Rate - 1 (ví dụ: 59 cho 60Hz)</td>
+            <td>ON (in NVCP nếu cần)</td>
+            <td>Tear-free, latency ~52ms</td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>Frame Gen + V-Sync ON in-game</strong></td>
+            <td>DO NOT</td>
+            <td>Causes slo-mo lag</td>
+            <td>Broken — nhiều reports Steam</td>
+          </tr>
+          <tr>
+            <td><strong>Frame Gen + G-Sync</strong></td>
+            <td>Cap = Refresh Rate - 3</td>
+            <td>OFF in-game, G-Sync active</td>
+            <td>55-60ms latency nhưng tear-free</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box box-tip">
+      <span class="box-icon">💡</span>
+      <span><strong>Special K / RTSS:</strong> Special K Latent Sync mode đạt frame time consistency tốt nhất (STDDEV 2.4 FPS) với latency 20.8ms — là lựa chọn tốt nếu không có G-Sync. RTSS frame limiter cũng ổn nhưng thêm ~1 frame latency. Trong-game frame limiter là tệ nhất về latency nhưng dễ nhất.</span>
+    </div>
+
+    <h3>G-Sync vs V-Sync Interaction Details</h3>
+    <div class="analysis-block">
+      <div class="analysis-title at-cyan">G-SYNC + VSYNC INTERACTION</div>
+      <p>NVIDIA recommend: Bật G-Sync, bật V-Sync <em>trong NVCP</em> (không phải in-game), tắt V-Sync in-game. V-Sync trong NVCP chỉ kích hoạt khi FPS vượt refresh rate — preventing tearing while not adding latency khi FPS trong VRR range.</p>
+      <p>Nếu dùng Frame Generation và không có G-Sync: Set frame cap to [refresh-3], tắt V-Sync mọi nơi. Nếu thấy tearing, thêm V-Sync từ NVCP chứ không phải in-game. Nhiều Steam user confirm đây là cách duy nhất Frame Gen hoạt động không lag.</p>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 7: PRESETS
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="presets">
+    <div class="section-header">
+      <div class="section-number">07</div>
+      <h2>5 Complete Presets</h2>
+    </div>
+
+    <!-- PRESET 1: COMPETITIVE -->
+    <div class="preset preset-competitive">
+      <div class="preset-header">
+        <div class="preset-badge">PRESET 01</div>
+        <div class="preset-name">Competitive / Max FPS</div>
+        <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);">TARGET: MAX FPS · LOW LATENCY</div>
+      </div>
+      <div class="preset-body">
+        <p style="margin-bottom:14px;font-size:13px;color:var(--text-dim);">Dành cho khi bạn muốn tối đa FPS và tối thiểu input latency. Tắt hầu hết visual effects nặng, tập trung gameplay smoothness. Phù hợp GPU mid-range ở 1440p hoặc high-end ở 4K.</p>
+        <div class="preset-grid">
+          <div>
+            <div class="preset-col-title">// GRAPHICS</div>
+            <div class="setting-row"><span class="setting-key">Upscaling</span><span class="setting-val sv-q">DLSS Quality (RTX) / XeSS Quality</span></div>
+            <div class="setting-row"><span class="setting-key">DLSS Sharpness</span><span class="setting-val sv-m">0–15%</span></div>
+            <div class="setting-row"><span class="setting-key">Texture Quality</span><span class="setting-val sv-u">ULTRA (VRAM permitting)</span></div>
+            <div class="setting-row"><span class="setting-key">Shadow Quality</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Local Shadow Quality</span><span class="setting-val sv-l">LOW</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Fog</span><span class="setting-val sv-l">LOW</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Cloud</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Screen Space Reflections</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Ambient Occlusion</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Color Precision</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Mirror Quality</span><span class="setting-val sv-l">LOW</span></div>
+            <div class="setting-row"><span class="setting-key">Anisotropic Filtering</span><span class="setting-val sv-on">16x (FREE)</span></div>
+          </div>
+          <div>
+            <div class="preset-col-title">// RT & POST PROCESS</div>
+            <div class="setting-row"><span class="setting-key">All Ray Tracing</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Path Tracing</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Ray Reconstruction</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Frame Generation</span><span class="setting-val sv-off">OFF (Reflex > FG)</span></div>
+            <div class="setting-row"><span class="setting-key">NVIDIA Reflex</span><span class="setting-val sv-on">ON + BOOST</span></div>
+            <div class="setting-row"><span class="setting-key">Motion Blur</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Depth of Field</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Film Grain</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Chromatic Aberration</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="preset-col-title" style="margin-top:12px">// GAMEPLAY</div>
+            <div class="setting-row"><span class="setting-key">Crowd Density</span><span class="setting-val sv-l">LOW–MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Character Detail</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Contact Shadows</span><span class="setting-val sv-on">ON</span></div>
+          </div>
+        </div>
+        <div class="box box-tip" style="margin-top:12px">
+          <span class="box-icon">💡</span>
+          <span>Frame cap: G-Sync → cap tại refresh-3. Không có VRR → cap tại refresh-1. V-Sync off in-game. Windows Power Plan: High Performance (không Ultimate).</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESET 2: BALANCED -->
+    <div class="preset preset-balanced">
+      <div class="preset-header">
+        <div class="preset-badge">PRESET 02</div>
+        <div class="preset-name">Balanced — Best All-Round</div>
+        <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);">TARGET: 60-120 FPS · GOOD VISUALS</div>
+      </div>
+      <div class="preset-body">
+        <p style="margin-bottom:14px;font-size:13px;color:var(--text-dim);">Consensus setting từ Reddit r/cyberpunkgame và Steam Community cho mid-to-high end builds. Tốt nhất cho majority of players.</p>
+        <div class="preset-grid">
+          <div>
+            <div class="preset-col-title">// GRAPHICS</div>
+            <div class="setting-row"><span class="setting-key">Upscaling</span><span class="setting-val sv-q">DLSS Quality · XeSS Quality</span></div>
+            <div class="setting-row"><span class="setting-key">DLSS Sharpness</span><span class="setting-val sv-m">0–20%</span></div>
+            <div class="setting-row"><span class="setting-key">Texture Quality</span><span class="setting-val sv-u">ULTRA</span></div>
+            <div class="setting-row"><span class="setting-key">Shadow Quality</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Local Shadow Quality</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Fog</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Cloud</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Screen Space Reflections</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Ambient Occlusion</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Color Precision</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Mirror Quality</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Anisotropic Filtering</span><span class="setting-val sv-on">16x</span></div>
+          </div>
+          <div>
+            <div class="preset-col-title">// RT & POST</div>
+            <div class="setting-row"><span class="setting-key">RT Reflections</span><span class="setting-val sv-on">ON (chỉ feature này)</span></div>
+            <div class="setting-row"><span class="setting-key">RT Shadows</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">RT AO</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">RT Diffuse Illumination</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Ray Reconstruction</span><span class="setting-val sv-off">OFF (no PT)</span></div>
+            <div class="setting-row"><span class="setting-key">Frame Generation</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">NVIDIA Reflex</span><span class="setting-val sv-on">ON + BOOST</span></div>
+            <div class="setting-row"><span class="setting-key">Motion Blur</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Depth of Field</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Film Grain</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Chromatic Aberration</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Crowd Density</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Subsurface Scattering</span><span class="setting-val sv-on">ON</span></div>
+            <div class="setting-row"><span class="setting-key">Contact Shadows</span><span class="setting-val sv-on">ON</span></div>
+          </div>
+        </div>
+        <div class="box box-tip" style="margin-top:12px">
+          <span class="box-icon">💡</span>
+          <span>Chỉ RT Reflections được bật vì đây là feature visual nhất với Night City's wet streets/glass. Tắt tất cả RT khác để tối ưu performance/VRAM trong preset này.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESET 3: CINEMATIC -->
+    <div class="preset preset-cinematic">
+      <div class="preset-header">
+        <div class="preset-badge">PRESET 03</div>
+        <div class="preset-name">Cinematic — Visuals First</div>
+        <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);">TARGET: 40-60 FPS · MAX VISUALS · NO PT</div>
+      </div>
+      <div class="preset-body">
+        <p style="margin-bottom:14px;font-size:13px;color:var(--text-dim);">Cho storytelling playthrough, screenshots, YouTube content. FPS không phải ưu tiên. RTX 3080/4070+ phù hợp. Tất cả RT đẹp nhất mà không cần Path Tracing.</p>
+        <div class="preset-grid">
+          <div>
+            <div class="preset-col-title">// GRAPHICS</div>
+            <div class="setting-row"><span class="setting-key">Upscaling</span><span class="setting-val sv-q">DLSS Quality hoặc DLAA</span></div>
+            <div class="setting-row"><span class="setting-key">Texture Quality</span><span class="setting-val sv-u">ULTRA</span></div>
+            <div class="setting-row"><span class="setting-key">Shadow Quality</span><span class="setting-val sv-u">ULTRA</span></div>
+            <div class="setting-row"><span class="setting-key">Local Shadow Quality</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Fog</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Cloud</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Screen Space Reflections</span><span class="setting-val sv-u">ULTRA</span></div>
+            <div class="setting-row"><span class="setting-key">Ambient Occlusion</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Color Precision</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Mirror Quality</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Anisotropic Filtering</span><span class="setting-val sv-on">16x</span></div>
+          </div>
+          <div>
+            <div class="preset-col-title">// RT & POST</div>
+            <div class="setting-row"><span class="setting-key">RT Reflections</span><span class="setting-val sv-on">ON</span></div>
+            <div class="setting-row"><span class="setting-key">RT Shadows</span><span class="setting-val sv-on">ON</span></div>
+            <div class="setting-row"><span class="setting-key">RT AO</span><span class="setting-val sv-off">OFF (GTAO tốt hơn/cheaper)</span></div>
+            <div class="setting-row"><span class="setting-key">RT Diffuse Illumination</span><span class="setting-val sv-off">OFF (chỉ PT mới có)</span></div>
+            <div class="setting-row"><span class="setting-key">Ray Reconstruction</span><span class="setting-val sv-off">OFF (no PT active)</span></div>
+            <div class="setting-row"><span class="setting-key">Frame Generation</span><span class="setting-val sv-m">OPTIONAL (nếu FPS dưới 40)</span></div>
+            <div class="setting-row"><span class="setting-key">NVIDIA Reflex</span><span class="setting-val sv-on">ON (tắt nếu bật FG)</span></div>
+            <div class="setting-row"><span class="setting-key">Motion Blur</span><span class="setting-val sv-on">ON (cinematic feel)</span></div>
+            <div class="setting-row"><span class="setting-key">Depth of Field</span><span class="setting-val sv-on">ON</span></div>
+            <div class="setting-row"><span class="setting-key">Film Grain</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Chromatic Aberration</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Crowd Density</span><span class="setting-val sv-h">HIGH</span></div>
+            <div class="setting-row"><span class="setting-key">Subsurface Scattering</span><span class="setting-val sv-on">ON</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESET 4: RT ULTRA OPTIMIZED -->
+    <div class="preset preset-rt">
+      <div class="preset-header">
+        <div class="preset-badge">PRESET 04</div>
+        <div class="preset-name">RT Ultra Optimized</div>
+        <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);">TARGET: 60-80 FPS RT · RTX 4070 Ti+</div>
+      </div>
+      <div class="preset-body">
+        <p style="margin-bottom:14px;font-size:13px;color:var(--text-dim);">Tối ưu RT tốt nhất không dùng Path Tracing. Tắt các RT features kém hiệu quả, giữ những cái visual nhất. Phù hợp RTX 3090/4070 Ti/4080 ở 1440p.</p>
+        <div class="preset-grid">
+          <div>
+            <div class="preset-col-title">// GRAPHICS (giảm để bù RT)</div>
+            <div class="setting-row"><span class="setting-key">Upscaling</span><span class="setting-val sv-b">DLSS Balanced</span></div>
+            <div class="setting-row"><span class="setting-key">Texture Quality</span><span class="setting-val sv-h">HIGH (12GB) / ULTRA (16GB)</span></div>
+            <div class="setting-row"><span class="setting-key">Shadow Quality</span><span class="setting-val sv-m">MEDIUM (RT handles it)</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Fog</span><span class="setting-val sv-l">LOW</span></div>
+            <div class="setting-row"><span class="setting-key">Screen Space Reflections</span><span class="setting-val sv-off">OFF (RT Reflections replaces)</span></div>
+            <div class="setting-row"><span class="setting-key">Ambient Occlusion (SSxO)</span><span class="setting-val sv-off">OFF (RT AO NOT on — use GTAO)</span></div>
+            <div class="setting-row"><span class="setting-key">Color Precision</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Mirror Quality</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Anisotropic Filtering</span><span class="setting-val sv-on">16x</span></div>
+          </div>
+          <div>
+            <div class="preset-col-title">// RT CONFIG</div>
+            <div class="setting-row"><span class="setting-key">RT Reflections</span><span class="setting-val sv-on">ON ✓</span></div>
+            <div class="setting-row"><span class="setting-key">RT Local Shadows</span><span class="setting-val sv-on">ON ✓ (RTX 4070 Ti+ only)</span></div>
+            <div class="setting-row"><span class="setting-key">RT Sun Shadows</span><span class="setting-val sv-on">ON ✓</span></div>
+            <div class="setting-row"><span class="setting-key">RT AO</span><span class="setting-val sv-off">OFF ✗ (GTAO = 90% quality cheaper)</span></div>
+            <div class="setting-row"><span class="setting-key">RT Diffuse Illumination</span><span class="setting-val sv-off">OFF ✗</span></div>
+            <div class="preset-col-title" style="margin-top:10px">// DLSS & LATENCY</div>
+            <div class="setting-row"><span class="setting-key">Ray Reconstruction</span><span class="setting-val sv-m">OPTIONAL (via json tweak)</span></div>
+            <div class="setting-row"><span class="setting-key">Frame Generation</span><span class="setting-val sv-off">OFF (use Reflex)</span></div>
+            <div class="setting-row"><span class="setting-key">NVIDIA Reflex</span><span class="setting-val sv-on">ON + BOOST</span></div>
+            <div class="setting-row"><span class="setting-key">Motion Blur</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Crowd Density</span><span class="setting-val sv-m">MEDIUM</span></div>
+          </div>
+        </div>
+        <div class="box box-note" style="margin-top:12px">
+          <span class="box-icon">◈</span>
+          <span><strong>Tại sao tắt RT AO?</strong> RT Ambient Occlusion cost 15-20% FPS nhưng GTAO (rasterized) đạt ~90% chất lượng ở fraction của cost đó. Đây là một trong những RT features cost-inefficient nhất. Bật RT Reflections và RT Shadows thay vào đó để visual được nhiều hơn.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESET 5: PATH TRACING -->
+    <div class="preset preset-pt">
+      <div class="preset-header">
+        <div class="preset-badge">PRESET 05</div>
+        <div class="preset-name">Path Tracing Viable</div>
+        <div style="margin-left:auto;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-dim);">TARGET: 60+ FPS PT · RTX 4080/4090</div>
+      </div>
+      <div class="preset-body">
+        <p style="margin-bottom:14px;font-size:13px;color:var(--text-dim);">Path Tracing thực sự transformative — lighting hoàn toàn khác biệt. Nhưng cực kỳ demanding. RTX 4090 ở 4K native PT = &lt;20 FPS. Preset này dùng DLSS + Frame Gen để đạt 60+ FPS hiển thị. Chấp nhận latency tradeoff.</p>
+        <div class="preset-grid">
+          <div>
+            <div class="preset-col-title">// GRAPHICS (tất cả giảm — PT đắt)</div>
+            <div class="setting-row"><span class="setting-key">Upscaling</span><span class="setting-val sv-p">DLSS Balanced / Performance</span></div>
+            <div class="setting-row"><span class="setting-key">Texture Quality</span><span class="setting-val sv-h">HIGH (12GB) / ULTRA (16GB+)</span></div>
+            <div class="setting-row"><span class="setting-key">Shadow Quality</span><span class="setting-val sv-m">MEDIUM (PT overrides)</span></div>
+            <div class="setting-row"><span class="setting-key">Screen Space Reflections</span><span class="setting-val sv-off">OFF (PT replaces)</span></div>
+            <div class="setting-row"><span class="setting-key">Volumetric Fog</span><span class="setting-val sv-l">LOW</span></div>
+            <div class="setting-row"><span class="setting-key">Crowd Density</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Color Precision</span><span class="setting-val sv-m">MEDIUM</span></div>
+            <div class="setting-row"><span class="setting-key">Mirror Quality</span><span class="setting-val sv-m">MEDIUM</span></div>
+          </div>
+          <div>
+            <div class="preset-col-title">// PT CONFIG</div>
+            <div class="setting-row"><span class="setting-key">Path Tracing (Overdrive)</span><span class="setting-val sv-on">ON ✓</span></div>
+            <div class="setting-row"><span class="setting-key">Ray Reconstruction</span><span class="setting-val sv-on">ON ✓ (bắt buộc với PT)</span></div>
+            <div class="setting-row"><span class="setting-key">Frame Generation</span><span class="setting-val sv-on">ON ✓ (cần thiết)</span></div>
+            <div class="setting-row"><span class="setting-key">NVIDIA Reflex</span><span class="setting-val sv-off">AUTO (disabled by FG)</span></div>
+            <div class="setting-row"><span class="setting-key">V-Sync</span><span class="setting-val sv-off">OFF in-game · G-Sync preferred</span></div>
+            <div class="preset-col-title" style="margin-top:10px">// POST PROCESS</div>
+            <div class="setting-row"><span class="setting-key">Motion Blur</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Depth of Field</span><span class="setting-val sv-m">OPTIONAL</span></div>
+            <div class="setting-row"><span class="setting-key">Film Grain</span><span class="setting-val sv-off">OFF</span></div>
+            <div class="setting-row"><span class="setting-key">Chromatic Aberration</span><span class="setting-val sv-off">OFF (hide upscale artifacts)</span></div>
+          </div>
+        </div>
+        <div class="box box-warn" style="margin-top:12px">
+          <span class="box-icon">⚠</span>
+          <span>PCOptimizedSettings confirm: RTX 4090 native 4K PT &lt;20 FPS. Với DLSS Quality + Frame Gen → ~75 FPS hiển thị, nhưng base frames là ~37. Latency ~55-60ms. Đây là tradeoff. Nếu cần responsiveness cao → dùng Preset 04 thay thế. Chỉ bật PT khi bạn chấp nhận latency cao hơn để đổi lấy visuals.</span>
+        </div>
+        <div class="box box-note" style="margin-top:8px">
+          <span class="box-icon">◈</span>
+          <span><strong>Tip:</strong> Nếu FPS dưới mong đợi với PT, tắt "RT Diffuse Illumination" trong settings (toggle riêng biệt trong một số build) — đây là toggle đắt nhất trong PT pipeline. Giữ lại reflections + GI basics thay vì tắt toàn bộ PT.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 8: DEBATES
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="debates">
+    <div class="section-header">
+      <div class="section-number">08</div>
+      <h2>Tranh cãi Cộng đồng — Phân tích Nguyên nhân</h2>
+    </div>
+
+    <div class="debate">
+      <div class="debate-header">⚡ DEBATE: DLSS vs DLAA — "DLSS trông garbage"</div>
+      <div class="debate-body">
+        <div class="debate-side debate-pro">
+          <div class="debate-label">Camp: DLAA &gt; DLSS</div>
+          <p style="font-size:13px;color:var(--text-mid);">Steam user (Nov 2024): DLSS blur faces, oversmeared, "like trash" at 1080p. DLAA crisp và clear hơn. Nhiều người đồng ý đặc biệt ở 1080p.</p>
+        </div>
+        <div class="debate-side debate-con">
+          <div class="debate-label">Counter: DLSS Intent vs DLAA Intent</div>
+          <p style="font-size:13px;color:var(--text-mid);">DLSS là upscaler (render lower res → upscale). DLAA là anti-aliaser (render native → denoise). So sánh trực tiếp không hợp lệ. DLAA tốt hơn về quality nhưng không tăng FPS — dùng khi bạn có GPU headroom.</p>
+        </div>
+        <div class="debate-verdict">
+          <div class="debate-label">VERDICT</div>
+          <p style="font-size:13px;color:var(--text-mid);">Cả hai camp đều đúng nhưng đang so sánh sai context. <strong>DLAA</strong> khi GPU &gt;90% ở native resolution là lãng phí. <strong>DLSS Quality ở 4K</strong> trông tốt và cho FPS cao hơn. <strong>DLSS ở 1080p</strong> render 720p — artifacts rõ hơn nhiều. Rule of thumb: 4K → DLSS Quality tốt; 1080p → DLAA hoặc DLSS Quality tối thiểu; 1440p → DLSS Quality là sweet spot.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="debate">
+      <div class="debate-header">⚡ DEBATE: Frame Generation — "Worth it or not?"</div>
+      <div class="debate-body">
+        <div class="debate-side debate-pro">
+          <div class="debate-label">Pro Frame Gen</div>
+          <p style="font-size:13px;color:var(--text-mid);">Với G-Sync + cap đúng, trải nghiệm mượt hơn rõ rệt. Đặc biệt với Path Tracing — không có FG thì PT không viable. RTX 4080+ users trên Reddit thường recommended.</p>
+        </div>
+        <div class="debate-side debate-con">
+          <div class="debate-label">Against Frame Gen</div>
+          <p style="font-size:13px;color:var(--text-mid);">Steam community: FG disable Reflex, latency từ 17ms → 55-60ms. Combat và aiming feel worse. Artifacts ở motion edges. "Shows high FPS, feels like low FPS".</p>
+        </div>
+        <div class="debate-verdict">
+          <div class="debate-label">VERDICT — Phụ thuộc use case</div>
+          <p style="font-size:13px;color:var(--text-mid);">FG có ý nghĩa trong 2 trường hợp: (1) Path Tracing bắt buộc — không có FG thì PT under 30 FPS không chơi được; (2) Story/chill playthrough với màn hình G-Sync, không care về combat latency. Không nên dùng FG nếu: bạn care về combat responsiveness, không có VRR display, hoặc base FPS &lt;50 real frames.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="debate">
+      <div class="debate-header">⚡ DEBATE: SSR Psycho vs Ultra vs Off (với RT)</div>
+      <div class="debate-body">
+        <div class="debate-side debate-pro">
+          <div class="debate-label">SSR khi không có RT</div>
+          <p style="font-size:13px;color:var(--text-mid);">SSR là non-RT reflection chính. Đây là setting GPU-heavy nhất ngoài RT. HIGH là sweet spot — quality gần Ultra, cost chỉ bằng 70%. Psycho tăng 30-33% cost thêm cho visual gain rất nhỏ.</p>
+        </div>
+        <div class="debate-side debate-con">
+          <div class="debate-label">SSR khi có RT Reflections ON</div>
+          <p style="font-size:13px;color:var(--text-mid);">Khi bật RT Reflections, SSR bị override phần lớn. Nhiều guide (bao gồm fpscalculator.net 2026) suggest tắt SSR hoàn toàn khi RT Reflections đã on.</p>
+        </div>
+        <div class="debate-verdict">
+          <div class="debate-label">VERDICT</div>
+          <p style="font-size:13px;color:var(--text-mid);">No RT: SSR HIGH là optimal (Psycho = trap). RT Reflections ON: SSR có thể tắt hoặc để Medium — RT đã covers reflections tốt hơn. Đây là redundancy issue thực sự.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 9: EFFICIENCY TABLE
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="efficiency">
+    <div class="section-header">
+      <div class="section-number">09</div>
+      <h2>Most Efficient Settings — Master Table</h2>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Setting</th>
+            <th>Optimal Value</th>
+            <th>Visual Gain</th>
+            <th>FPS Cost</th>
+            <th>VRAM Cost</th>
+            <th>CPU Cost</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="eff-high-gain">
+            <td><strong>Anisotropic Filtering</strong></td>
+            <td><code>16x</code></td>
+            <td><span class="pill pill-high">Rõ</span></td>
+            <td><span class="pill pill-nil">~0%</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-boost">FREE UPGRADE</span></td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>Texture Quality</strong></td>
+            <td><code>ULTRA</code></td>
+            <td><span class="pill pill-high">Rõ</span></td>
+            <td><span class="pill pill-nil">~1-2%</span></td>
+            <td><span class="pill pill-high">+1-2 GB</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-boost">FREE (nếu đủ VRAM)</span></td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>Subsurface Scattering</strong></td>
+            <td><code>ON</code></td>
+            <td><span class="pill pill-low">Nhỏ</span></td>
+            <td><span class="pill pill-nil">Marginal</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-boost">ALWAYS ON</span></td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>Contact Shadows</strong></td>
+            <td><code>ON</code></td>
+            <td><span class="pill pill-low">Nhỏ nhưng polish</span></td>
+            <td><span class="pill pill-nil">~2%</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-boost">ALWAYS ON</span></td>
+          </tr>
+          <tr class="eff-high-gain">
+            <td><strong>Character Detail Level</strong></td>
+            <td><code>ULTRA</code></td>
+            <td><span class="pill pill-med">NPC close-up</span></td>
+            <td><span class="pill pill-nil">~1%</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-boost">ALWAYS ULTRA</span></td>
+          </tr>
+          <tr>
+            <td><strong>Color Precision</strong></td>
+            <td><code>MEDIUM</code></td>
+            <td><span class="pill pill-nil">Micro</span></td>
+            <td><span class="pill pill-low">+5-6% (từ High)</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-boost">REDUCE — free FPS</span></td>
+          </tr>
+          <tr>
+            <td><strong>RT Reflections</strong></td>
+            <td><code>ON (nếu RTX)</code></td>
+            <td><span class="pill pill-high">Lớn nhất trong RT</span></td>
+            <td><span class="pill pill-med">15-25%</span></td>
+            <td><span class="pill pill-med">+1 GB</span></td>
+            <td><span class="pill pill-low">Nhỏ</span></td>
+            <td><span class="pill pill-med">BEST RT TRADEOFF</span></td>
+          </tr>
+          <tr class="eff-high-cost">
+            <td><strong>SSR</strong></td>
+            <td><code>HIGH (no RT)</code></td>
+            <td><span class="pill pill-nil">Psycho vs High: nhỏ</span></td>
+            <td><span class="pill pill-high">30% tăng thêm Psycho</span></td>
+            <td><span class="pill pill-med">Trung bình</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-trap">TRÁNH PSYCHO</span></td>
+          </tr>
+          <tr class="eff-high-cost">
+            <td><strong>Volumetric Fog</strong></td>
+            <td><code>LOW</code></td>
+            <td><span class="pill pill-nil">Nhỏ vs Medium</span></td>
+            <td><span class="pill pill-high">15-20%</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-trap">HIGH IMPACT REDUCE</span></td>
+          </tr>
+          <tr class="eff-high-cost">
+            <td><strong>Crowd Density</strong></td>
+            <td><code>MEDIUM</code></td>
+            <td><span class="pill pill-nil">Ít hơn NPC</span></td>
+            <td><span class="pill pill-high">10-18% city</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-high">Giảm rất nhiều</span></td>
+            <td><span class="pill pill-trap">HIGH IMPACT REDUCE</span></td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>RT AO</strong></td>
+            <td><code>OFF</code></td>
+            <td><span class="pill pill-nil">Nhỏ vs GTAO</span></td>
+            <td><span class="pill pill-high">15-20%</span></td>
+            <td><span class="pill pill-med">+1 GB</span></td>
+            <td><span class="pill pill-nil">Nhỏ</span></td>
+            <td><span class="pill pill-trap">TRAP — dùng GTAO</span></td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>Film Grain</strong></td>
+            <td><code>OFF</code></td>
+            <td><span class="pill pill-trap">Negative</span></td>
+            <td><span class="pill pill-nil">~0%</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-trap">ALWAYS OFF</span></td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>Chromatic Aberration</strong></td>
+            <td><code>OFF</code></td>
+            <td><span class="pill pill-trap">Negative</span></td>
+            <td><span class="pill pill-nil">~0%</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-trap">ALWAYS OFF</span></td>
+          </tr>
+          <tr class="eff-trap">
+            <td><strong>Volumetric Cloud Ultra</strong></td>
+            <td><code>MEDIUM/OFF</code></td>
+            <td><span class="pill pill-nil">Micro vs Medium</span></td>
+            <td><span class="pill pill-low">4-5%</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-nil">~0</span></td>
+            <td><span class="pill pill-trap">LOW EFFORT GAIN</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 10: FPS KILLERS RANKING
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="fps-killers">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <h2>Biggest FPS Killers — Ranking</h2>
+    </div>
+
+    <ul class="rank-list">
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--neon-pink)">#1</div>
+        <div class="rank-info">
+          <div class="rank-name">Path Tracing (Overdrive) — 80-90% FPS Drop</div>
+          <div class="rank-desc">Toggle duy nhất tàn phá FPS nhiều nhất. RTX 4090 native 4K = &lt;20 FPS. Transformative visually nhưng đòi hỏi DLSS + FG để playable.</div>
+        </div>
+        <span class="pill pill-high">90% drop</span>
+      </li>
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--red-warn)">#2</div>
+        <div class="rank-info">
+          <div class="rank-name">RT Psycho Preset (tất cả RT on) — 60-80% Drop</div>
+          <div class="rank-desc">Full RT stack: reflections + shadows + AO + diffuse. Tất cả cộng lại đè nặng cả GPU compute lẫn RT cores. Chỉ RTX 4080/4090 có thể playable với upscaling.</div>
+        </div>
+        <span class="pill pill-high">70% drop avg</span>
+      </li>
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--neon-orange)">#3</div>
+        <div class="rank-info">
+          <div class="rank-name">Screen Space Reflections Psycho — 25-33% FPS</div>
+          <div class="rank-desc">Setting rasterized đắt nhất trong game. Psycho cost gấp đôi Ultra trong trường hợp xấu nhất. Đây là "trap" setting — visual gain không xứng đáng.</div>
+        </div>
+        <span class="pill pill-high">33% drop</span>
+      </li>
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--neon-yellow)">#4</div>
+        <div class="rank-info">
+          <div class="rank-name">Volumetric Fog Ultra/High — 15-20% FPS</div>
+          <div class="rank-desc">Fog volumetric đòi hỏi nhiều fillrate và ray marching. Low vs Ultra gần như visual identical trong gameplay thực tế; screenshot comparison mới thấy rõ.</div>
+        </div>
+        <span class="pill pill-med">20% drop</span>
+      </li>
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--neon-yellow)">#5</div>
+        <div class="rank-info">
+          <div class="rank-name">Crowd Density High → City areas — 10-18% FPS</div>
+          <div class="rank-desc">CPU-bound chứ không phải GPU. Khu Watson, Kabuki, Dogtown với crowd High → CPU bottleneck rõ. Hạ xuống Medium gần như không thấy sự khác biệt visual nhưng 1% lows cải thiện đáng kể.</div>
+        </div>
+        <span class="pill pill-med">18% CPU</span>
+      </li>
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--neon-green)">#6</div>
+        <div class="rank-info">
+          <div class="rank-name">Ambient Occlusion Ultra — 8-15% FPS</div>
+          <div class="rank-desc">AO Ultra vs Medium: visible nhưng không dramatic trong gameplay. Medium là sweet spot. Off trông rõ ràng flatter. Tắt khi dùng RT AO — nhưng nhớ RT AO cũng không hiệu quả.</div>
+        </div>
+        <span class="pill pill-low">12% drop</span>
+      </li>
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--neon-green)">#7</div>
+        <div class="rank-info">
+          <div class="rank-name">Native Resolution (no upscaling) — Variable</div>
+          <div class="rank-desc">Không dùng DLSS/FSR ở 4K Ultra = 40-60% FPS loss so với DLSS Quality. Upscaling là free FPS trong context modern gaming — không dùng là lãng phí.</div>
+        </div>
+        <span class="pill pill-low">40-60% vs DLSS</span>
+      </li>
+      <li class="rank-item">
+        <div class="rank-num" style="color:var(--text-dim)">#8</div>
+        <div class="rank-info">
+          <div class="rank-name">Shadow Quality Ultra — 5-10% FPS</div>
+          <div class="rank-desc">High vs Ultra shadows: sự khác biệt nhỏ. Ultra shadows cost thêm 5-10% cho shadow resolution tăng nhẹ ở xa.</div>
+        </div>
+        <span class="pill pill-nil">8% drop</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 11: TRAP SETTINGS
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="trap-settings">
+    <div class="section-header">
+      <div class="section-number">11</div>
+      <h2>Settings Almost Nobody Should Use</h2>
+    </div>
+
+    <div class="card-grid">
+      <div class="card card-pink">
+        <h4>⛔ SSR Psycho (non-RT)</h4>
+        <p>Cost thêm 30% FPS so với Ultra SSR, visual gain gần như không có trong gameplay. Ultra SSR là điểm diminishing return cực mạnh — đây là định nghĩa của trap setting theo đa số benchmark. Chỉ hữu ích khi quay video capture chậm.</p>
+      </div>
+      <div class="card card-pink">
+        <h4>⛔ RT Ambient Occlusion</h4>
+        <p>Cost 15-20% FPS. GTAO (rasterized) đạt 90% visual result ở 10% cost. Không có lý do bật RT AO khi GTAO Medium đã tốt hơn ở mức chi phí hoàn toàn khác nhau.</p>
+      </div>
+      <div class="card card-pink">
+        <h4>⛔ Film Grain</h4>
+        <p>Không có FPS cost, không có visual benefit — chỉ thêm noise làm mờ hình ảnh. Là post-process effect dạng "stylistic" mà hầu hết người chơi PC đều tắt ngay khi vào game. Tắt để text và detail rõ hơn.</p>
+      </div>
+      <div class="card card-pink">
+        <h4>⛔ Chromatic Aberration</h4>
+        <p>Giả lập optical lens artifact. Không FPS cost nhưng làm blur cạnh pixels, đặc biệt rõ khi dùng upscaling (compound với DLSS blur). Không có lý do bật trừ khi bạn muốn intentional cinematic artifact look.</p>
+      </div>
+      <div class="card card-pink">
+        <h4>⛔ DLSS Ultra Performance (trừ PT 4K)</h4>
+        <p>Render ở 33% resolution. Ghosting, smearing, NPC faces blur nặng. Chỉ có ý nghĩa trong Path Tracing mode ở 4K nơi FPS không thể đạt otherwise. Ở bất kỳ settings khác = trade quality quá nhiều.</p>
+      </div>
+      <div class="card card-pink">
+        <h4>⛔ Frame Gen với base &lt;50 FPS</h4>
+        <p>Frame Gen tạo FPS giả từ interpolation. Với 35 FPS base → 70 "FPS" nhưng latency 55-60ms và game feel không tương ứng. Nhiều người bị trap bởi số FPS cao trong HUD nhưng cảm giác thực tế tệ hơn 60 FPS real không có FG.</p>
+      </div>
+      <div class="card card-pink">
+        <h4>⛔ Ultimate Performance Power Plan</h4>
+        <p>Windows Ultimate Performance Plan gây micro-stutter trên nhiều DirectX 12 titles bao gồm CP2077 (confirmed fpscalculator.net 2026). Dùng High Performance hoặc Balanced thay thế.</p>
+      </div>
+      <div class="card card-pink">
+        <h4>⛔ Motion Blur (combat players)</h4>
+        <p>Giảm clarity, adds GPU overhead nhỏ, đặc biệt xấu khi kết hợp với upscaling blur. Chỉ có ý nghĩa trong cutscene chậm. 95% competitive/action players tắt ngay.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────────────────────────────
+       SECTION 12: MISC
+  ──────────────────────────────────────────────────── -->
+  <div class="section" id="misc">
+    <div class="section-header">
+      <div class="section-number">12</div>
+      <h2>HDR · ReShade · OS Tweaks</h2>
+    </div>
+
+    <h3>HDR Considerations</h3>
+    <div class="card card-cyan">
+      <p>CP2077 có native HDR support tốt. Nếu có HDR display: bật HDR trong Windows, bật HDR trong game, calibrate Peak Brightness theo display specs (thường 600-1000 nits cho mid-range HDR monitors, 1500+ cho high-end OLED/mini-LED). <strong>SDR trên HDR display không nên bật game HDR</strong> — hình sẽ washed out.</p>
+      <p>Special K tool có thể inject HDR vào SDR pipeline nhất định và cho phép HDR screenshots đúng chuẩn — useful cho content creators. Special K cũng enable NVIDIA Reflex cho toàn game kể cả menu.</p>
+    </div>
+
+    <h3>ReShade Viability</h3>
+    <div class="card card-yellow">
+      <p>ReShade hoạt động tốt với CP2077 với rasterized settings. <strong>Tuy nhiên với Ray Tracing/Path Tracing</strong>: ReShade inject vào post-process pipeline và có thể gây conflicts với DLSS RR, frame pacing issues, hoặc artifacts. Community Steam report không consistent: một số có vấn đề, một số không.</p>
+      <p><strong>Recommendation:</strong> ReShade safe với non-RT builds. Với PT preset, test trước. Sharpening filter nhẹ (SMAA + Luma Sharpening) là phổ biến nhất, thay thế tốt cho DLSS oversmearing mà không tốn FPS đáng kể (1-3% overhead tùy shader).</p>
+    </div>
+
+    <h3>OS & System Tweaks</h3>
+    <div class="card-grid">
+      <div class="card card-cyan" style="margin-bottom:0">
+        <h4>Windows</h4>
+        <div class="setting-row"><span class="setting-key">Power Plan</span><span class="setting-val sv-h">High Performance (không Ultimate)</span></div>
+        <div class="setting-row"><span class="setting-key">Hardware Accelerated GPU Scheduling</span><span class="setting-val sv-on">ON (HAGS)</span></div>
+        <div class="setting-row"><span class="setting-key">Background apps</span><span class="setting-val sv-off">Close Discord, Chrome khi play</span></div>
+        <div class="setting-row"><span class="setting-key">Game Mode</span><span class="setting-val sv-on">ON</span></div>
+        <div class="setting-row"><span class="setting-key">XMP/EXPO RAM</span><span class="setting-val sv-on">Enable in BIOS</span></div>
+        <div class="setting-row"><span class="setting-key">Shader Cache</span><span class="setting-val sv-m">Xóa và rebuild nếu stutter</span></div>
+        <div class="setting-row"><span class="setting-key">Fullscreen Exclusive</span><span class="setting-val sv-on">ON — tốt nhất cho latency</span></div>
+      </div>
+      <div class="card card-yellow" style="margin-bottom:0">
+        <h4>NVIDIA Specific</h4>
+        <div class="setting-row"><span class="setting-key">Low Latency Mode (NVCP)</span><span class="setting-val sv-off">OFF nếu dùng Reflex in-game</span></div>
+        <div class="setting-row"><span class="setting-key">Shader Cache Size</span><span class="setting-val sv-h">Set 10GB trong NVCP</span></div>
+        <div class="setting-row"><span class="setting-key">Texture Filtering Quality</span><span class="setting-val sv-m">High Performance</span></div>
+        <div class="setting-row"><span class="setting-key">Resizable BAR</span><span class="setting-val sv-on">Enable trong BIOS (nếu supported)</span></div>
+        <div class="setting-row"><span class="setting-key">DDU before driver update</span><span class="setting-val sv-on">Recommended nếu có issues</span></div>
+        <div class="setting-row"><span class="setting-key">Windowed Borderless</span><span class="setting-val sv-m">Fallback nếu Fullscreen có issues</span></div>
+      </div>
+    </div>
+
+    <div class="box box-tip" style="margin-top:12px">
+      <span class="box-icon">💡</span>
+      <span><strong>Patch 2.2 Stutter Fix:</strong> Nếu bạn update lên 2.2 và thấy stutter mới (confirmed nhiều reports Steam Dec 2024): thử Windowed Borderless, reset settings về default rồi config lại, xóa shader cache. Một số NVIDIA users trên patch 2.2 gặp upscaling không hoạt động — fix bằng reset settings hoặc reinstall game (rare).</span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>// COMPILED FROM: Digital Foundry · Hardware Unboxed · PCOptimizedSettings.com · CapFrameX · WCCFTech · Steam Community · Reddit r/cyberpunkgame · TechSpot · bottleneckcalculator.us.com · fpscalculator.net //</p>
+    <p style="margin-top:6px">// DATA POST PATCH 2.2 — LAST UPDATED: 2025 // NOT AFFILIATED WITH CD PROJEKT RED //</p>
+  </div>
+
+</div>
+
+<a class="scroll-top" href="#top" title="Back to top">↑</a>
+
+</body>
+</html>
